@@ -1,5 +1,3 @@
-// App.jsx (Updated with H-care style layout)
-
 import { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import * as d3 from 'd3';
@@ -111,7 +109,7 @@ function App() {
   return (
     <div className="dashboard">
       <aside className="sidebar">
-        <h2>Blackcoffer</h2>
+        <h2>My Dashboard</h2>
         <ul>
           <li>Overview</li>
           <li>Analytics</li>
