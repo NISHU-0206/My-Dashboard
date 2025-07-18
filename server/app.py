@@ -7,8 +7,13 @@ CORS(app)
 
 @app.route('/', methods=['GET'])
 def get_data():
-    with open('jsondata.json', 'r', encoding='utf-8') as file:
-        data = json.load(file)
+    try:
+        with open('jsondata.json', 'r', encoding='utf-8') as file:
+            data = json.load(file)
+    except FileNotFoundError:
+        return jsonify({'error': 'JSON file not found'}), 404
+    except json.JSONDecodeError:
+        return jsonify({'error': 'Invalid JSON format'}), 500
 
     filters = {
         "topic": request.args.get("topic"),
@@ -22,11 +27,13 @@ def get_data():
         "city": request.args.get("city")
     }
 
-    # Filter Data
-    filtered_data = [d for d in data if all(
-        not filters[key] or str(d.get(key, "")).lower() == filters[key].lower()
-        for key in filters
-    )]
+    # Filter data (case-insensitive match)
+    filtered_data = [
+        d for d in data if all(
+            not filters[key] or str(d.get(key, "")).lower() == filters[key].lower()
+            for key in filters
+        )
+    ]
 
     return jsonify(filtered_data)
 
